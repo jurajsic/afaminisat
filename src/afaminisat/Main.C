@@ -342,8 +342,8 @@ int main(int argc, char** argv) {
     auto mc = ModelCheckingImpl(message.getRoot<cnfafa::Afa>());
     close(fd);
     if (mc.modelCheck()) {
-        std::cout << "result: EMPTY" << std::endl;
+        std::cout << "EMPTY" << std::endl;
     } else {
-        std::cout << "result: NOT EMPTY" << std::endl;
+        std::cout << "NOT EMPTY" << std::endl;
     }
 }
