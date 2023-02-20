@@ -322,23 +322,28 @@ public:
 };
 
 int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cout << "ERROR: Expecting .afasat file as argument" << std::endl;
-        return -1;
+    std::string inputFile;
+    if (argc == 2) {
+        inputFile = argv[1];
+    } else if (argc == 3 && std::string(argv[1]) == std::string("--no-trie")) {
+        inputFile = argv[2];
+        use_trie = false;
     } else {
-        int fd = open(argv[1], O_RDONLY);
-        if (fd < 0) {
-            std::cout << "ERROR: Could not open file" << std::endl;
-            return -1;
-        }
+        std::cerr << "error: Program is used as: afaminisat [--no-trie] input.afasat" << std::endl;
+        return -1;
+    }
+    int fd = open(inputFile.c_str(), O_RDONLY);
+    if (fd < 0) {
+        std::cerr << "error: Could not open file" << std::endl;
+        return -1;
+    }
 
-        capnp::StreamFdMessageReader message(fd);
-        auto mc = ModelCheckingImpl(message.getRoot<cnfafa::Afa>());
-        close(fd);
-        if (mc.modelCheck()) {
-            std::cout << "EMPTY" << std::endl;
-        } else {
-            std::cout << "NOT EMPTY" << std::endl;
-        }
+    capnp::StreamFdMessageReader message(fd);
+    auto mc = ModelCheckingImpl(message.getRoot<cnfafa::Afa>());
+    close(fd);
+    if (mc.modelCheck()) {
+        std::cout << "result: EMPTY" << std::endl;
+    } else {
+        std::cout << "result: NOT EMPTY" << std::endl;
     }
 }
