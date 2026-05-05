@@ -163,7 +163,7 @@ public:
     T&       operator [] (int index)        { return data[index]; }
 
     // Don't allow copying (error prone):
-    vec<T>&  operator = (vec<T>& other) { TEMPLATE_FAIL; }
+    vec<T>&  operator = (vec<T>& other) = delete; //{ TEMPLATE_FAIL; }
              // vec        (vec<T>& other) { TEMPLATE_FAIL; }
 
     // Duplicatation (preferred instead):
